@@ -1,0 +1,23 @@
+// src/components/LandingPage.js
+import React from "react";
+import "./LandingPage.css"; // custom styles
+
+function LandingPage() {
+  return (
+    <div className="landing-container">
+      {/* Logo in top-left */}
+      <div className="logo-container">
+        <img
+          src="https://videos.openai.com/vg-assets/assets%2Ftask_01k53azf87fvssd6cthrdb1sxc%2F1757827611_img_0.webp?st=2025-09-14T04%3A18%3A38Z&se=2025-09-20T05%3A18%3A38Z&sks=b&skt=2025-09-14T04%3A18%3A38Z&ske=2025-09-20T05%3A18%3A38Z&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skoid=8ebb0df1-a278-4e2e-9c20-f2d373479b3a&skv=2019-02-02&sv=2018-11-09&sr=b&sp=r&spr=https%2Chttp&sig=di7RH%2FZ0LyYuWs3zJjARCoer634ss4jxtYMgDXyc1Cw%3D&az=oaivgprodscus"
+          alt="Logo"
+          className="logo"
+        />
+      </div>
+
+      {/* Center welcome text */}
+      <h1 className="welcome-text">Welcome to Cons.com</h1>
+    </div>
+  );
+}
+
+export default LandingPage;

@@ -8,6 +8,9 @@ import ReportForm from "./components/ReportForm";
 import { auth } from "./firebase-config";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 
+// Import your logo
+import logo from "./assets/logo.png"; // <-- put your uploaded logo in src/assets/
+
 function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -30,24 +33,49 @@ function App() {
 
   return (
     <div className="App">
-      <header style={{ padding: "15px", background: "#f5f5f5" }}>
-        <h1>
-          Welcome to <span style={{ color: "#38bdf8" }}>Cons.com</span>
-        </h1>
-        {user ? (
-          <>
-            <span style={{ marginRight: "20px" }}>
-              Hello, {user.displayName || "User"}
-            </span>
-            <button onClick={handleLogout}>Logout</button>
-          </>
-        ) : (
-          <Link to="/login">
-            <button>Login</button>
-          </Link>
-        )}
+      {/* Header Section */}
+      <header
+        style={{
+          padding: "15px",
+          background: "#000", // black background for contrast
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        {/* Logo + Title */}
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <img
+            src={logo}
+            alt="Logo"
+            style={{
+              width: "50px",
+              height: "50px",
+              marginRight: "12px",
+              animation: "fadeIn 2s",
+            }}
+          />
+          <h1 style={{ margin: 0, color: "#38bdf8" }}>Cons.com</h1>
+        </div>
+
+        {/* Right Side User/Buttons */}
+        <div>
+          {user ? (
+            <>
+              <span style={{ marginRight: "20px", color: "#fff" }}>
+                Hello, {user.displayName || "User"}
+              </span>
+              <button onClick={handleLogout}>Logout</button>
+            </>
+          ) : (
+            <Link to="/login">
+              <button>Login</button>
+            </Link>
+          )}
+        </div>
       </header>
 
+      {/* Routes */}
       <Routes>
         <Route
           path="/login"

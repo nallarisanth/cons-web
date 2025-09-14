@@ -1,43 +1,23 @@
-// src/components/Login.js
-import React, { useState, useEffect } from "react";
-
+// src/components/Signup.js
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { auth, provider } from "../firebase-config";
-import { signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
-import "../components/Auth.css"; // make sure you have styling
+import { auth } from "../firebase-config";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
-function Login() {
+function Signup() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  // Google Login
-  const handleGoogleLogin = async () => {
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-      // Redirect to setup profile if first-time login
-      if (!user.displayName) {
-        navigate("/setup-profile");
-      } else {
-        navigate("/feed");
-      }
-    } catch (err) {
-      console.error(err);
-      setError(err.message);
-    }
-  };
-
-  // Email & Password Login
-  const handleEmailLogin = async (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await createUserWithEmailAndPassword(auth, email, password);
       navigate("/feed");
     } catch (err) {
       console.error(err);
-      setError("Invalid email or password");
+      setError(err.message);
     }
   };
 
@@ -56,12 +36,11 @@ function Login() {
         backgroundPosition: "center",
       }}
     >
-      <h2 style={{ marginBottom: "20px", color: "#fff" }}>Login to Cons.com</h2>
-
+      <h2 style={{ marginBottom: "20px", color: "#fff" }}>Sign Up</h2>
       {error && <p style={{ color: "red" }}>{error}</p>}
 
       <form
-        onSubmit={handleEmailLogin}
+        onSubmit={handleSignup}
         style={{
           display: "flex",
           flexDirection: "column",
@@ -88,50 +67,27 @@ function Login() {
           type="submit"
           style={{
             padding: "10px",
-            marginBottom: "10px",
             background: "#38bdf8",
             color: "#fff",
             border: "none",
             cursor: "pointer",
           }}
         >
-          Login
+          Sign Up
         </button>
       </form>
 
-      <p style={{ color: "#fff" }}>Or</p>
-
-      <button
-        onClick={handleGoogleLogin}
-        style={{
-          display: "flex",
-          alignItems: "center",
-          padding: "10px 20px",
-          background: "#fff",
-          border: "1px solid #ccc",
-          cursor: "pointer",
-          borderRadius: "5px",
-        }}
-      >
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"
-          alt="Google"
-          style={{ width: "20px", marginRight: "10px" }}
-        />
-        Login with Google
-      </button>
-
       <p style={{ marginTop: "15px", color: "#fff" }}>
-        Don't have an account?{" "}
+        Already have an account?{" "}
         <span
           style={{ textDecoration: "underline", cursor: "pointer" }}
-          onClick={() => navigate("/signup")}
+          onClick={() => navigate("/login")}
         >
-          Sign Up
+          Login
         </span>
       </p>
     </div>
   );
 }
 
-export default Login;
+export default Signup;

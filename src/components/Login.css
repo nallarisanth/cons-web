@@ -1,0 +1,58 @@
+
+.login-container {
+  background: url("https://media.istockphoto.com/id/1365254048/vector/black-steel-countertop-empty-shelf-vector-realistic-mockup.jpg?s=612x612&w=0&k=20&c=r6N_cT-kiJ3f7Mj9bI5oF8-lSmxijSsSqHX9PcQkXzI=")
+    no-repeat center center fixed;
+  background-size: cover;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-box {
+  background: rgba(0, 0, 0, 0.6);
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+  color: white;
+  width: 300px;
+}
+
+.login-box input {
+  display: block;
+  margin: 10px auto;
+  padding: 10px;
+  width: 90%;
+  border: none;
+  border-radius: 5px;
+}
+
+.login-box button {
+  margin-top: 10px;
+  padding: 10px;
+  width: 95%;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.google-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  color: #444;
+  border: none;
+  border-radius: 5px;
+  padding: 12px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+  margin: 0 auto;
+}
+
+.google-btn img {
+  width: 20px;
+  margin-right: 10px;
+}

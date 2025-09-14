@@ -1,110 +1,68 @@
+// src/App.js
 import React, { useEffect, useState } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "./firebase-config";
-
+import { Routes, Route, Link, Navigate } from "react-router-dom";
 import Login from "./components/Login";
+import Signup from "./components/Signup";
 import Feed from "./components/Feed";
 import ReportForm from "./components/ReportForm";
-import PrivateRoute from "./components/PrivateRoute";
+import { auth } from "./firebase-config";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 
 function App() {
-  const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // This listener persists user login
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        setUser(currentUser);
-        navigate("/feed");
-      } else {
-        setUser(null);
-        navigate("/");
-      }
+      setUser(currentUser);
       setLoading(false);
     });
-
     return () => unsubscribe();
-  }, [navigate]);
+  }, []);
+
+  const handleLogout = async () => {
+    await signOut(auth);
+  };
 
   if (loading) {
-    return (
-      <div
-        style={{
-          height: "100vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          fontSize: "1.5rem",
-        }}
-      >
-        Loading...
-      </div>
-    );
+    return <h2>Loading...</h2>;
   }
 
   return (
     <div className="App">
-      <Routes>
-        {/* Landing Page */}
-        <Route
-          path="/"
-          element={
-            <div
-              style={{
-                height: "100vh",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                background: "linear-gradient(135deg, #0f172a, #1e293b)",
-                color: "white",
-                textAlign: "center",
-              }}
-            >
-              <h1 style={{ fontSize: "3rem", marginBottom: "10px" }}>
-                Welcome to <span style={{ color: "#38bdf8" }}>Cons.com</span>
-              </h1>
-              <p style={{ fontSize: "1.2rem", marginBottom: "30px" }}>
-                Report issues. Get them solved. Build a better India 🇮🇳
-              </p>
-              <Login />
-            </div>
-          }
-        />
+      <header style={{ padding: "15px", background: "#f5f5f5" }}>
+        <h1>
+          Welcome to <span style={{ color: "#38bdf8" }}>Cons.com</span>
+        </h1>
+        {user ? (
+          <>
+            <span style={{ marginRight: "20px" }}>
+              Hello, {user.displayName || "User"}
+            </span>
+            <button onClick={handleLogout}>Logout</button>
+          </>
+        ) : (
+          <Link to="/login">
+            <button>Login</button>
+          </Link>
+        )}
+      </header>
 
-        {/* Protected Routes */}
+      <Routes>
+        <Route
+          path="/login"
+          element={user ? <Navigate to="/feed" /> : <Login />}
+        />
+        <Route path="/signup" element={<Signup />} />
         <Route
           path="/feed"
-          element={
-            <PrivateRoute>
-              <Feed />
-            </PrivateRoute>
-          }
+          element={user ? <Feed /> : <Navigate to="/login" />}
         />
         <Route
           path="/report"
-          element={
-            <PrivateRoute>
-              <ReportForm />
-            </PrivateRoute>
-          }
+          element={user ? <ReportForm /> : <Navigate to="/login" />}
         />
-
-        {/* Fallback */}
-        <Route
-          path="*"
-          element={
-            <div>
-              <h2>404 - Page Not Found</h2>
-              <a href="/" style={{ color: "#38bdf8" }}>
-                Go Home
-              </a>
-            </div>
-          }
-        />
+        <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </div>
   );

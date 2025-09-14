@@ -1,48 +1,72 @@
-// components/Feed.js
+// src/components/Feed.js
 import React, { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
-import { Link, useNavigate } from "react-router-dom";
-import { db, auth } from "../firebase-config";
-import { signOut } from "firebase/auth";
+import { db } from "../firebase-config";
+import { Link } from "react-router-dom";
 
 function Feed() {
   const [posts, setPosts] = useState([]);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPosts = async () => {
       const querySnapshot = await getDocs(collection(db, "problems"));
-      setPosts(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      setPosts(querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
     };
     fetchPosts();
   }, []);
 
-  // Logout handler
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-      navigate("/login"); // redirect to login page
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
-  };
-
   return (
-    <div className="feed-container">
-      <div className="feed-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <h2>Reported Problems</h2>
-        <button onClick={handleLogout} style={{ padding: "8px 16px", background: "#ef4444", color: "#fff", border: "none", borderRadius: "6px", cursor: "pointer" }}>
-          Logout
-        </button>
-      </div>
-
+    <div
+      style={{
+        minHeight: "100vh",
+        backgroundImage:
+          "url('https://e0.pxfuel.com/wallpapers/645/334/desktop-wallpaper-minimalist-design-%E2%9D%A4-for-ultra-tv.jpg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        padding: "20px",
+      }}
+    >
+      <h2 style={{ color: "#fff", marginBottom: "20px" }}>Reported Problems</h2>
       <Link to="/report">
-        <button style={{ margin: "20px 0", padding: "8px 16px" }}>Report a Problem</button>
+        <button
+          style={{
+            padding: "10px 20px",
+            background: "#38bdf8",
+            color: "#fff",
+            border: "none",
+            cursor: "pointer",
+            marginBottom: "20px",
+          }}
+        >
+          Report a Problem
+        </button>
       </Link>
 
-      {posts.map(post => (
-        <div key={post.id} className="post-card" style={{ border: "1px solid #ddd", borderRadius: "8px", padding: "10px", marginBottom: "15px" }}>
-          {post.imageURL && <img src={post.imageURL} alt="Problem" style={{ maxWidth: "100%", borderRadius: "6px" }} />}
+      {posts.length === 0 && <p style={{ color: "#fff" }}>No posts yet.</p>}
+
+      {posts.map((post) => (
+        <div
+          key={post.id}
+          style={{
+            background: "rgba(0,0,0,0.5)",
+            padding: "15px",
+            borderRadius: "10px",
+            width: "400px",
+            marginBottom: "15px",
+            color: "#fff",
+            textAlign: "center",
+          }}
+        >
+          {post.imageURL && (
+            <img
+              src={post.imageURL}
+              alt="Problem"
+              style={{ maxWidth: "100%", borderRadius: "8px", marginBottom: "10px" }}
+            />
+          )}
           <p>{post.description}</p>
           <small>{post.location}</small>
         </div>
